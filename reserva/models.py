@@ -1,18 +1,42 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
-class Servidor(AbstractBaseUser):
-    matricula = models.AutoField(primary_key=True)
+class ServidorManager(BaseUserManager):
+    def create_user(self, matricula, email, password=None, **extra_fields):
+        if not matricula:
+            raise ValueError("O usuário deve ter uma matrícula.")
+        if not email:
+            raise ValueError("O usuário deve ter um email.")
+        email = self.normalize_email(email)
+        user = self.model(matricula=matricula, email=email, **extra_fields)
+        user.set_password(password)  # Criptografa a senha automaticamente
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, matricula, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        return self.create_user(matricula, email, password, **extra_fields)
+
+class Servidor(AbstractBaseUser, PermissionsMixin):
+    id = models.AutoField(primary_key=True)
+    matricula = models.CharField(max_length=20, unique=True)
     nome = models.CharField(max_length=100)
-    FUNCOES = [('p', 'Professor'), ('d', 'Direção'), ('c', 'Cordenação')]
+    FUNCOES = [('p', 'Professor'), ('d', 'Direção'), ('c', 'Coordenação')]
     funcao = models.CharField(max_length=1, choices=FUNCOES)
     ativo = models.BooleanField(default=True)
     email = models.EmailField(unique=True)
-    senha = models.CharField(max_length=100)
     ult_acesso = models.DateTimeField(auto_now=True)
 
+    # Campos adicionais para compatibilidade com Django Admin
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+
+    objects = ServidorManager()
+
     USERNAME_FIELD = 'matricula'
-    REQUIRED_FIELDS = ['email', 'senha']
+    REQUIRED_FIELDS = ['email']
 
     class Meta:
         verbose_name = 'Servidor'

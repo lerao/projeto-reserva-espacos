@@ -3,6 +3,9 @@ from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
 from .models import Servidor, Horario, Espaco, Reserva, ReservarHorario
 from .serializers import ServidorSerializer, HorarioSerializer, EspacoSerializer, ReservaSerializer, ReservarHorarioSerializer
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
 
 
 # Create your views here.
@@ -29,12 +32,37 @@ class ReservaHorarioViewSet(viewsets.ModelViewSet):
 
 
 
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+
 def login_view(request):
+    if request.method == 'POST':
+        matricula = request.POST.get('matricula')
+        senha = request.POST.get('password')
+        
+        user = authenticate(request, matricula=matricula, password=senha)
+
+        if user is not None:
+            login(request, user)  # Realiza o login e salva na sessão
+            return redirect('index')  # Redireciona para a página inicial
+        else:
+            messages.error(request, 'Matrícula ou senha inválidos.')
+
     return render(request, 'login.html')
 
+
 @login_required
-def solicitacao_reserva_view(request):
-    return render(request, 'reserva/solicitacao_reserva.html')
+def index_view(request):
+    return render(request, 'index.html')
+
+@login_required
+def teste_view(request):
+    return render(request, 'index.html')
 
 @login_required
 def historico_reservas_view(request):
