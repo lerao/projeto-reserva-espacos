@@ -55,13 +55,11 @@ def login_view(request):
 
     return render(request, 'login.html')
 
-
-@login_required
 def index_view(request):
     return render(request, 'index.html')
 
 @login_required
-def teste_view(request):
+def logado_view(request):
     return render(request, 'index.html')
 
 @login_required

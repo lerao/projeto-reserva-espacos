@@ -7,8 +7,8 @@ router = DefaultRouter()
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('', views.login_view, name='login'),
-    path('index/', views.index_view, name='index'),
-    path('teste/', views.teste_view, name='teste  '),
+    path('login/', views.login_view, name='login'),
+    path('logado/', views.logado_view, name='logado'),
+    path('', views.index_view, name='index'),
     
 ]
