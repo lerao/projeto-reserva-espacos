@@ -65,3 +65,8 @@ def logado_view(request):
 @login_required
 def historico_reservas_view(request):
     return render(request, 'reserva/minhas_reservas.html')
+
+@login_required
+def espaco_view(request):
+    
+    return render(request, 'reserva/espaco.html', )
