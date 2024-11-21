@@ -147,7 +147,7 @@ def criar_reserva(request):
                 messages.error(request, f"Horário inválido: {horario_id}.")
                 return redirect('criar_reserva')
 
-        # Se houver horários indisponíveis, exiba mensagem e volte ao formulário
+        
         if horarios_indisponiveis:
             horarios_msg = ", ".join(
                 [f"Aula {h.numero_aula} - {h.horario}" for h in horarios_indisponiveis]
