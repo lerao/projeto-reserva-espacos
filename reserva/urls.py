@@ -11,5 +11,7 @@ urlpatterns = [
     path('logado/', views.logado_view, name='logado'),
     path('', views.index_view, name='index'),
     path('espaco/', views.espaco_view, name='espaco'),
+    path('reserva/', views.criar_reserva, name='criar_reserva'),
+    path('horarios-disponiveis/', views.horarios_disponiveis, name='horarios_disponiveis'),
     
 ]

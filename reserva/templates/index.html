@@ -113,96 +113,49 @@
 </nav>
 
 <div data-bs-spy="scroll" class="scrollspy-example">
- 
   <section id="landingFunFacts" class="section-py landing-fun-facts">
     <div class="container">
-      <div class="row gy-6" style="
-    margin-top: 60px;
-">
-    <h4 class="text-center mb-1">
-        <span class="position-relative fw-extrabold z-1">
-          &lt; 
-        </span>
-        <span class="position-relative fw-extrabold z-1" style="width: 50%;">
-          
-          Reservas do dia 06/11 - Segunda-feira  
-          
-        </span>
-        <span class="position-relative fw-extrabold z-1">
-          &gt;
-        </span>
-      </h4>
-        <div class="col-sm-6 col-lg-3">
-          <div class="card border border-primary shadow-none">
-            <div class="card-body text-center">
-              
-              <h3 class="mb-0">Lab. Informática</h3>
-              <p class="fw-medium mb-0">
-                <span class="badge" style="
-    background: #80808a;
-">10h00 - 12h00 - 1DS-A</span> <span class="badge p-2" style="
-    background: #80808a;
-    margin-top: 5px;
-">12h00 - 13h00 - 1DS-A</span>
-              </p>
-            </div>
+      <div class="row gy-6" style="margin-top: 60px;">
+          <h4 class="text-center mb-1">
+              <span class="position-relative fw-extrabold z-1">&lt;</span>
+              <span class="position-relative fw-extrabold z-1" style="width: 50%;"> Reservas Atuais </span>
+              <span class="position-relative fw-extrabold z-1">&gt;</span>
+          </h4>
+  
+          {% for espaco, reservas_detalhadas in reservas_por_espaco.items %}
+          <div class="col-sm-6 col-lg-3">
+              <div class="card border border-primary shadow-none">
+                  <div class="card-body text-center">
+                      <h3 class="mb-0">{{ espaco.nome }}</h3>
+                      {% if reservas_detalhadas %}
+                          {% for detalhe in reservas_detalhadas %}
+                          <p class="fw-medium mb-0">
+                              <span class="badge" style="background: #80808a;">
+                                  {{ detalhe.reserva.data }} - {{ detalhe.reserva.turma }}
+                              </span>
+                              <br>
+                              Horários:
+                              {% for horario in detalhe.horarios %}
+                                  <span class="badge" style="background: #e0e0e0;">
+                                      {{ horario.numero_aula.horario }}
+                                  </span>
+                              {% endfor %}
+                          </p>
+                          {% endfor %}
+                      {% else %}
+                      <p class="fw-medium mb-0">Sem reservas</p>
+                      {% endif %}
+                  </div>
+              </div>
           </div>
-        </div>
-        <div class="col-sm-6 col-lg-3">
-          <div class="card border border-success shadow-none">
-            <div class="card-body text-center">
-              
-              <h3 class="mb-0">Lab. Especial</h3>
-              <p class="fw-medium mb-0">Sem reservas<br></p>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6 col-lg-3">
-          <div class="card border border-info shadow-none">
-            <div class="card-body text-center">
-              
-              <h3 class="mb-0">Lab. Fisica</h3>
-              <p class="fw-medium mb-0">Sem reservas<br></p>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6 col-lg-3">
-          <div class="card border border-warning shadow-none">
-            <div class="card-body text-center">
-              
-              <h3 class="mb-0">Lab. Linguas</h3>
-              <p class="fw-medium mb-0">Sem reservas<br></p>
-            </div>
-          </div>
-        </div>
+          {% endfor %}
       </div>
-    </div>
-  </section>
-
-  <section id="landingContact" class="section-py bg-body landing-contact">
-    <div class="container">
-      <div class="text-center mb-4">
-        <span class="badge bg-label-primary">IMPORTANTE</span>
-      </div>
-      <h4 class="text-center mb-1">
-        <span class="position-relative fw-extrabold z-1">Regras de Uso
-          <img src="{% static 'assets/img/front-pages/icons/section-title-icon.png' %}" alt="laptop charging" class="section-title-img position-absolute object-fit-contain bottom-0 z-n1">
-        </span>
-        para todos os laboratórios
-      </h4>
-      <div class="row g-12 mt-1">
-        
-        <ol>
-          <li><strong>Mantenha os Espaços Limpos e Organizados:</strong> Após o uso, organize o ambiente, devolvendo os móveis e materiais ao seu devido lugar.</li>
-          <li><strong>Proibição de Consumo de Alimentos e Bebidas:</strong> É proibido consumir alimentos e bebidas dentro dos espaços, exceto em áreas especificamente designadas para esse fim.</li>
-          <li><strong>Respeite os Horários Reservados:</strong> Os espaços devem ser utilizados somente dentro dos horários previamente reservados. Evite ultrapassar o tempo estipulado.</li>
-          <li><strong>Controle o Nível de Ruído:</strong> O ambiente deve ser silencioso ou com baixo nível de ruído, a fim de garantir a convivência tranquila e sem perturbações para outros usuários.</li>
-          <li><strong>Preserve os Materiais de Uso Coletivo:</strong> Cuide e conserve os materiais e equipamentos de uso coletivo, evitando danos e uso inadequado.</li>
-      </ol>
-       </div>
-    </div>
+  </div>
+  
+  
   </section>
 </div>
+
 
 <footer class="landing-footer bg-body footer-text">
   <div class="footer-bottom py-3 py-md-5">

@@ -52,6 +52,19 @@ class Horario(models.Model):
     numero_aula = models.PositiveBigIntegerField(unique=True)
     horario = models.TimeField()
 
+    def is_available(self, espaco, data):
+        """Verifica se o horário está disponível para um espaço e data"""
+        return not ReservarHorario.objects.filter(
+            reserva__espaco=espaco,
+            reserva__data=data,
+            numero_aula=self
+        ).exists()
+
+    def __str__(self):
+        return f"Aula {self.numero_aula} - {self.horario.strftime('%H:%M')}"
+
+
+
 class Espaco(models.Model):
     nome = models.CharField(max_length=100)
     ativo = models.BooleanField(default=True)
@@ -71,5 +84,8 @@ class Reserva(models.Model):
     
 
 class ReservarHorario(models.Model):
-    reserva = models.ForeignKey(Reserva, on_delete=models.CASCADE)
-    numero_aula = models.ForeignKey(Horario, on_delete=models.CASCADE)  
+    reserva = models.ForeignKey(Reserva, on_delete=models.CASCADE, related_name='horarios')
+    numero_aula = models.ForeignKey(Horario, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.numero_aula.horario} - {self.reserva.turma}"
