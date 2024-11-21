@@ -159,7 +159,7 @@ def criar_reserva(request):
 
         # Criar a reserva
         reserva = Reserva.objects.create(
-            matricula=request.user,  # Certifique-se de que o usuário está autenticado
+            matricula=request.user,  #  usuário tem que ta autenticado
             espaco=espaco,
             data=data,
             motivo=motivo,
