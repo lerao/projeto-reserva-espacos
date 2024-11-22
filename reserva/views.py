@@ -83,8 +83,20 @@ def logado_view(request):
     return render(request, 'index.html')
 
 @login_required
-def historico_reservas_view(request):
-    return render(request, 'reserva/minhas_reservas.html')
+def minhas_reservas_view(request):
+    # Filtra as reservas do usuário logado
+    reservas = Reserva.objects.filter(matricula=request.user)
+    
+    # Cria um dicionário que armazena os espaços com as respectivas reservas do usuário
+    espacos_reservas = {}
+    for espaco in Espaco.objects.all():
+        # Verifica se há reservas para esse espaço do usuário logado
+        reservas_do_espaco = reservas.filter(espaco=espaco)
+        if reservas_do_espaco.exists():
+            espacos_reservas[espaco] = reservas_do_espaco
+
+    return render(request, 'minhas_reservas.html', {'espacos_reservas': espacos_reservas})
+
 
 @login_required
 def espaco_view(request):
@@ -176,3 +188,6 @@ def criar_reserva(request):
     horarios = Horario.objects.all()
     espacos = Espaco.objects.filter(ativo=True)
     return render(request, 'reserva_form.html', {'horarios': horarios, 'espacos': espacos})
+
+
+
