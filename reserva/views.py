@@ -1,9 +1,11 @@
 from django.shortcuts import render
+from datetime import date
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from rest_framework import viewsets
 from .models import Servidor, Horario, Espaco, Reserva, ReservarHorario
 from .serializers import ServidorSerializer, HorarioSerializer, EspacoSerializer, ReservaSerializer, ReservarHorarioSerializer
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from .forms import ReservaForm
@@ -82,11 +84,12 @@ def index_view(request):
 def logado_view(request):
     return render(request, 'index.html')
 
+
+
 @login_required
 def minhas_reservas_view(request):
     # Filtra as reservas do usuário logado
     reservas = Reserva.objects.filter(matricula=request.user)
-    
     # Cria um dicionário que armazena os espaços com as respectivas reservas do usuário
     espacos_reservas = {}
     for espaco in Espaco.objects.all():
@@ -95,7 +98,17 @@ def minhas_reservas_view(request):
         if reservas_do_espaco.exists():
             espacos_reservas[espaco] = reservas_do_espaco
 
-    return render(request, 'minhas_reservas.html', {'espacos_reservas': espacos_reservas})
+    return render(request, 'minhas_reservas.html', {'espacos_reservas': espacos_reservas,})
+
+
+def cancelar_reserva(request, reserva_id):
+    if request.method == 'POST':
+        reserva = get_object_or_404(Reserva, id=reserva_id)
+        reserva.delete()
+        return JsonResponse({'success': True, 'message': 'Reserva cancelada com sucesso!'})
+    return JsonResponse({'success': False, 'message': 'Ação inválida.'}, status=400)
+
+
 
 
 @login_required
@@ -182,7 +195,7 @@ def criar_reserva(request):
             ReservarHorario.objects.create(reserva=reserva, numero_aula=horario)
 
         messages.success(request, "Reserva criada com sucesso!")
-        return redirect('index')
+        return redirect('minhas_reservas')
 
     # Renderizar formulário no caso de GET
     horarios = Horario.objects.all()
