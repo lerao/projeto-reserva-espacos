@@ -91,14 +91,19 @@ def minhas_reservas_view(request):
     # Filtra as reservas do usuário logado
     reservas = Reserva.objects.filter(matricula=request.user)
     # Cria um dicionário que armazena os espaços com as respectivas reservas do usuário
+    data_hoje = date.today()
+
+
     espacos_reservas = {}
     for espaco in Espaco.objects.all():
         # Verifica se há reservas para esse espaço do usuário logado
         reservas_do_espaco = reservas.filter(espaco=espaco)
         if reservas_do_espaco.exists():
             espacos_reservas[espaco] = reservas_do_espaco
+            for reserva in reservas_do_espaco:
+                reserva.is_future = reserva.data >= data_hoje
 
-    return render(request, 'minhas_reservas.html', {'espacos_reservas': espacos_reservas,})
+    return render(request, 'minhas_reservas.html', {'espacos_reservas': espacos_reservas, 'data_hoje': data_hoje.strftime('%Y-%m-%d')})
 
 
 def cancelar_reserva(request, reserva_id):

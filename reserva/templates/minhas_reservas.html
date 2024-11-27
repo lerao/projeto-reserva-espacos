@@ -7,30 +7,38 @@
   <section id="landingFunFacts" class="section-py landing-fun-facts">
     <div class="container">
       <div class="row gy-6" style="
-    margin-top: 60px;
+    margin-top: 60px; justify-content: center;
 ">
         <h1 class="text-center mb-1">Minhas Reservas</h1>
         <h4 class="text-center mb-1">
           <span class="position-relative fw-extrabold z-1" style="width: 50%;">
 
-            <input type="date" value="{{ data_atual }}">
+            <input type="date" id="filtro-data" value="{{ data_hoje }}" style="border-radius: 5px; text-align: center;">
 
           </span>
         </h4>
+        
         {% for espaco, reservas_espaco in espacos_reservas.items %}
         <div class="col-sm-6 col-lg-3">
           <div class="card border border-primary shadow-none">
-            <div class="card-body text-center">
+            <div class="card-body text-center" style="gap: 10px; display: flex; flex-direction: column;">
               <h3 class="mb-0">{{ espaco.nome }}</h3>
 
               {% if reservas_espaco %}
               {% for agend in reservas_espaco %}
               <span class="badge reserva-{{ agend.id }}" style="background: #80808a;">
-                {{ agend.turma }} - {{ agend.data|date:"d/m/y" }}
+                {{ agend.turma }}   |   {{ agend.data|date:"d/M" }} - {{horario}}
+                {% if agend.is_future %}
+                
                 <button type="button" class="btn btn-sm btn-danger cancelar-reserva" data-id="{{ agend.id }}"
-                  style="margin-left: 10px;">
+                  style="margin-left: 10px; border-radius: 100px; width: 10px; height: 25px;">
                   X
                 </button>
+                {% else %}
+
+                <img src="../static/img/Icon-confirmation.svg" alt="" style="width: 20px; height: 20px; opacity: 0.3;">
+                
+                {% endif %}
               </span>
               {% endfor %}
               {% else %}

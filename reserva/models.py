@@ -81,7 +81,10 @@ class Reserva(models.Model):
     turma = models.CharField(max_length=50, null=True, blank=True)
     data_hora_reserva = models.DateTimeField(auto_now_add=True)
 
-    
+    def __str__(self):
+        return f"{self.matricula} - {self.espaco} - {self.data}"
+
+
 
 class ReservarHorario(models.Model):
     reserva = models.ForeignKey(Reserva, on_delete=models.CASCADE, related_name='horarios')
