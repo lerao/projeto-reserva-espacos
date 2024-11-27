@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fazer Reserva</title>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -46,8 +43,25 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        .btn-secundary {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #ff0000;
+        color: #fff;
+        text-align: center;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+
+            
+        }
         .btn-primary:hover {
             background-color: #0056b3;
+        }
+
+        .btn-secundary:hover {
+            background-color: #ff0000;
         }
         .alert {
             padding: 10px;
@@ -61,8 +75,10 @@
             border-color: #f5c2c7;
         }
     </style>
-</head>
-<body>
+
+
+
+
     <h2>Fazer Reserva</h2>
     <form method="post">
         {% csrf_token %}
@@ -95,6 +111,7 @@
         <input type="text" id="turma" name="turma">
 
         <button type="submit" class="btn-primary">Reservar</button>
+       <a href="{% url 'index' %}"> <button type="button" class="btn-secundary">Cancelar</button> </a> 
     </form>
 
     <script>
@@ -143,5 +160,5 @@ function fetchHorarios() {
 
 
     </script>
-</body>
-</html>
+{% endblock %}
+
