@@ -1,4 +1,10 @@
- Created by https://www.gitignore.io
+
+.venv/*
+*.exe
+*.bat
+*.ps1
+
+
 
 ### OSX ###
 .DS_Store
