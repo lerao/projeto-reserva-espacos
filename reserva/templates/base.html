@@ -106,7 +106,15 @@
       <div class="landing-menu-overlay d-lg-none"></div>
       <ul class="navbar-nav flex-row align-items-center ms-auto">
         <li>
-          <a href="/login" class="btn btn-primary"><span class="d-none d-md-block">Login</span></a>
+          {% if user.is_authenticated %}
+            <form method="post" action="{% url 'logout' %}">
+             {{ user.get_username }}
+              {% csrf_token %}
+              <button class="btn btn-danger btn-xs" type="submit">logout</button>
+            </form>
+          {% else %}
+            <a href="/login" class="btn btn-primary"><span class="d-none d-md-block">Login</span></a>
+          {% endif %}
         </li>
       </ul>
     </div>

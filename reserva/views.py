@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from .forms import ReservaForm
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 
 
 # Create your views here.
@@ -37,6 +37,8 @@ class ReservaHorarioViewSet(viewsets.ModelViewSet):
 
 
 def login_view(request):
+    if request.user.id:
+        return HttpResponseRedirect('/index')
     if request.method == 'POST':
         matricula = request.POST.get('matricula')
         senha = request.POST.get('password')

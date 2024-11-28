@@ -1,164 +1,127 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 0;
-            background-color: #f7f7f7;
-            color: #333;
-        }
-        h2 {
-            text-align: center;
-            color: #444;
-        }
-        form {
-            max-width: 600px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
-        input, textarea, select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .btn-primary {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            text-align: center;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
 
-        .btn-secundary {
-        display: inline-block;
-        padding: 10px 20px;
-        background-color: #ff0000;
-        color: #fff;
-        text-align: center;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-
-            
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-
-        .btn-secundary:hover {
-            background-color: #ff0000;
-        }
-        .alert {
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid transparent;
-            border-radius: 5px;
-        }
-        .alert-danger {
-            color: #842029;
-            background-color: #f8d7da;
-            border-color: #f5c2c7;
-        }
-    </style>
-
-
-
-
-    <h2>Fazer Reserva</h2>
-    <form method="post">
-        {% csrf_token %}
-
-        <!-- Espaço -->
-        <label for="espaco">Espaço</label>
-        <select name="espaco" id="espaco" required>
-            <option value="">Selecione o espaço</option>
-            {% for espaco in espacos %}
-            <option value="{{ espaco.id }}">{{ espaco.nome }}</option>
-            {% endfor %}
-        </select>
-
-        <!-- Data -->
-        <label for="data">Data</label>
-        <input type="date" id="data" name="data" required>
-
-        <!-- Horários disponíveis -->
-        <label for="horarios">Horários Disponíveis</label>
-        <div id="horarios">
-            <p>Selecione a data e o espaço para ver os horários disponíveis.</p>
-        </div>
-
-        <!-- Motivo -->
-        <label for="motivo">Motivo</label>
-        <textarea id="motivo" name="motivo" rows="3"></textarea>
-
-        <!-- Turma -->
-        <label for="turma">Turma</label>
-        <input type="text" id="turma" name="turma">
-
-        <button type="submit" class="btn-primary">Reservar</button>
-       <a href="{% url 'index' %}"> <button type="button" class="btn-secundary">Cancelar</button> </a> 
-    </form>
-
-    <script>
-document.getElementById('data').addEventListener('change', fetchHorarios);
-document.getElementById('espaco').addEventListener('change', fetchHorarios);
-
-function fetchHorarios() {
-    const dataField = document.getElementById('data');
-    const espacoField = document.getElementById('espaco');
-    const horariosDiv = document.getElementById('horarios');
-
-    const data = dataField.value;
-    const espaco = espacoField.value;
-
-    // Limpar mensagens ou horários anteriores
-    horariosDiv.innerHTML = '<p>Carregando...</p>';
-
-    if (data && espaco) {
-        fetch(`/horarios-disponiveis/?data=${data}&espaco=${espaco}`)
-            .then(response => response.json())
-            .then(data => {
-                horariosDiv.innerHTML = ''; // Limpa o placeholder de "Carregando..."
-                if (data.error) {
-                    horariosDiv.innerHTML = `<p class="alert alert-danger">${data.error}</p>`;
-                } else if (data.horarios.length === 0) {
-                    horariosDiv.innerHTML = '<p>Sem horários disponíveis.</p>';
-                } else {
-                    data.horarios.forEach(horario => {
-                        horariosDiv.innerHTML += `
-                            <div>
-                                <input type="checkbox" id="horario_${horario.id}" name="horarios" value="${horario.id}">
-                                <label for="horario_${horario.id}">Aula ${horario.numero_aula} - ${horario.horario}</label>
-                            </div>
-                        `;
-                    });
-                }
-            })
-            .catch(error => {
-                console.error("Erro ao carregar os horários:", error);
-                horariosDiv.innerHTML = `<p class="alert alert-danger">Erro ao carregar os horários.</p>`;
-            });
-    } else {
-        horariosDiv.innerHTML = '<p>Selecione a data e o espaço para ver os horários disponíveis.</p>';
-    }
+<style>
+input[type="date"]::-webkit-calendar-picker-indicator {
+    color: rgba(0, 0, 0, 0);
+    opacity: 1;
+    display: block;
+    background-repeat:  no-repeat;
+    width: 25px;
+    height: 25px;
+    border-width: thin
 }
+input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+}
+input::-webkit-datetime-edit-fields-wrapper {
+    position: relative;
+}
+input::-webkit-datetime-edit {
+    position: relative;
+    left: 40px;
+}
+</style>
 
+<div data-bs-spy="scroll" class="scrollspy-example">
+  <section id="landingFunFacts" class="section-py landing-fun-facts">
+    <div class="container">
+      <div class="row gy-6">
+        <h3>Fazer Reserva</h3>
+        <form method="post">
+            {% csrf_token %}
+    
+            <!-- Espaço -->
+            <div class="mb-3">
+                <label for="espaco" class="form-label">Espaço</label>
+                <select name="espaco" id="espaco" required="true" class="form-control">
+                    <option value="">Selecione o espaço</option>
+                    {% for espaco in espacos %}
+                    <option value="{{ espaco.id }}">{{ espaco.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+    
+            <!-- Data -->
+            <div class="mb-3">
+                <label for="data" class="form-label">Data</label>
+                <input type="date" id="data" class="form-control" name="data" required>
+            </div>
 
-    </script>
+            <!-- Horários disponíveis -->
+            <div class="mb-3">
+                <label for="horarios" class="form-label">Horários Disponíveis</label>
+                <div id="horarios">
+                    <p>Selecione a data e o espaço para ver os horários disponíveis.</p>
+                </div>
+            </div>
+        
+            <!-- Motivo -->
+            <div class="mb-3">
+                <label for="motivo" class="form-label">Motivo</label>
+                <textarea id="motivo" name="motivo" class="form-control" rows="3"></textarea>
+            </div>
+
+            <!-- Turma -->
+            <div class="mb-3">
+                <label for="email" class="form-label">Turma</label>
+                <input type="text" class="form-control" id="turma" name="turma" placeholder="Digite sua matrícula" required="" autofocus="">
+            </div>
+              
+            <button type="submit" class="btn btn-primary">Reservar</button>
+           <a href="{% url 'index' %}"> <button type="button" class="btn btn-secondary">Cancelar</button> </a> 
+        </form>
+    
+        <script>
+    document.getElementById('data').addEventListener('change', fetchHorarios);
+    document.getElementById('espaco').addEventListener('change', fetchHorarios);
+    
+    function fetchHorarios() {
+        const dataField = document.getElementById('data');
+        const espacoField = document.getElementById('espaco');
+        const horariosDiv = document.getElementById('horarios');
+    
+        const data = dataField.value;
+        const espaco = espacoField.value;
+    
+        // Limpar mensagens ou horários anteriores
+        horariosDiv.innerHTML = '<p>Carregando...</p>';
+    
+        if (data && espaco) {
+            fetch(`/horarios-disponiveis/?data=${data}&espaco=${espaco}`)
+                .then(response => response.json())
+                .then(data => {
+                    horariosDiv.innerHTML = ''; // Limpa o placeholder de "Carregando..."
+                    if (data.error) {
+                        horariosDiv.innerHTML = `<p class="alert alert-danger">${data.error}</p>`;
+                    } else if (data.horarios.length === 0) {
+                        horariosDiv.innerHTML = '<p>Sem horários disponíveis.</p>';
+                    } else {
+                        data.horarios.forEach(horario => {
+                            horariosDiv.innerHTML += `
+                                <div class="">
+                                    <input type="checkbox" id="horario_${horario.id}" name="horarios" value="${horario.id}">
+                                    <label class="form-label" for="horario_${horario.id}">Aula ${horario.numero_aula} - ${horario.horario}</label>
+                                </div>
+                            `;
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro ao carregar os horários:", error);
+                    horariosDiv.innerHTML = `<p class="alert alert-danger">Erro ao carregar os horários.</p>`;
+                });
+        } else {
+            horariosDiv.innerHTML = '<p>Selecione a data e o espaço para ver os horários disponíveis.</p>';
+        }
+    }
+    
+    
+        </script>
+        </div>
+    </div>
+  </section>
+</div>
+
 {% endblock %}
-
