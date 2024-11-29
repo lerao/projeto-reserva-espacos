@@ -17,7 +17,7 @@
 
           </span>
         </h4>
-        
+
         {% for espaco, reservas_espaco in espacos_reservas.items %}
         <div class="col-sm-6 col-lg-3">
           <div class="card border border-primary shadow-none">
@@ -26,23 +26,37 @@
 
               {% if reservas_espaco %}
               {% for agend in reservas_espaco %}
-              <span class="badge reserva-{{ agend.id }}" style="background: #80808a;">
-                {{ agend.turma }}   |   {{ agend.data|date:"d/M" }} - {{horario}}
-                {% if agend.is_future %}
-                
-                <button type="button" class="btn btn-sm btn-danger cancelar-reserva" data-id="{{ agend.id }}"
-                  style="margin-left: 10px; border-radius: 100px; width: 10px; height: 25px;">
+              <span class="badge reserva-{{ agend.id }}" style="background: #80808a; display: flex; flex-direction: column; text-align: center;">
+                <div style="text-align: center;">
+                  {{ agend.reserva.turma }} | {{ agend.reserva.data|date:"d/M" }}
+                </div>
+                <div style="text-align: center; display: flex; flex-direction: column;">
+                  
+                  {% for horario in agend.horarios %}
+                  <div style="margin-top: 3px;">
+                    
+                    {{horario.numero_aula}}
+
+                  </div>
+                  
+                  {% endfor %}
+                  
+                  {% if agend.is_future %}
+                  <button type="button" class="btn btn-sm btn-danger cancelar-reserva" data-id="{{ agend.reserva.id }}"  style="margin-left: 10px; border-radius: 50px; height: 10px; margin-top: 7px;"
+                  >
                   X
                 </button>
-                {% else %}
-
-                <img src="../static/img/Icon-confirmation.svg" alt="" style="width: 20px; height: 20px; opacity: 0.3;">
                 
+                {% else %}
+                <img src="../static/img/Icon-confirmation.svg" alt=""
+                style="width: 20px; height: 20px; opacity: 0.3;">
                 {% endif %}
+                  
+              </div>
+
               </span>
               {% endfor %}
-              {% else %}
-              <p>Não há agendamentos para este espaço.</p>
+
               {% endif %}
 
             </div>
@@ -83,35 +97,36 @@
   </section>
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-  $(document).ready(function () {
-    $('.cancelar-reserva').on('click', function () {
-      const reservaId = $(this).data('id');  // Obtém o ID da reserva
-      const badgeElement = $(`.reserva-${reservaId}`); // Seleciona o elemento da reserva
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('.cancelar-reserva').on('click', function () {
+        const reservaId = $(this).data('id');  // Obtém o ID da reserva
+        const reservaContainer = $(this).closest('.reserva-{{ reservaId }}'); // Encontrar o contêiner da reserva
 
-      if (confirm('Você tem certeza que deseja cancelar esta reserva?')) {
-        $.ajax({
-          url: `/cancelar-reserva/${reservaId}/`,  // URL da rota de cancelamento
-          type: 'POST',
-          data: {
-            csrfmiddlewaretoken: '{{ csrf_token }}',  // Token CSRF
-          },
-          success: function (response) {
-            if (response.success) {
-              alert(response.message);
-              badgeElement.fadeOut();  // Remove visualmente o elemento da lista
-            } else {
-              alert('Falha ao cancelar a reserva.');
+        if (confirm('Você tem certeza que deseja cancelar esta reserva?')) {
+          $.ajax({
+            url: `/cancelar-reserva/${reservaId}/`,  // URL da rota de cancelamento
+            type: 'POST',
+            data: {
+              csrfmiddlewaretoken: '{{ csrf_token }}',  // Token CSRF
+            },
+            success: function (response) {
+              if (response.success) {
+                alert(response.message);
+                reservaContainer.remove();  // Remova o contêiner da reserva imediatamente
+              } else {
+                alert('Falha ao cancelar a reserva.');
+              }
+            },
+            error: function () {
+              alert('Erro no servidor. Tente novamente mais tarde.');
             }
-          },
-          error: function () {
-            alert('Erro no servidor. Tente novamente mais tarde.');
-          }
-        });
-      }
+          });
+        }
+      });
     });
-  });
-</script>
 
-{% endblock %}
+  </script>
+
+  {% endblock %}
