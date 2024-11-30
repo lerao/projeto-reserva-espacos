@@ -124,9 +124,21 @@
           <li>
             {% if user.is_authenticated %}
             <form method="post" action="{% url 'logout' %}" style="gap: 15px; display: flex;">
-              <span style="font-weight: 700;">{{ user.nome }}</span>
-              {% csrf_token %}
-              <button class="btn btn-danger btn-xs" type="submit">logout</button>
+            <div class="btn-group">
+              <button type="button" class="btn btn-info dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">{{ user.nome }}<span style="font-size: 0.7rem; margin-left: 9px;">▼</span></button>
+              <ul class="dropdown-menu" >
+                <li><a class="dropdown-item" href="{% url 'admin:password_change' %}">Editar Perfil</a></li>
+                
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                {% csrf_token %}
+                <li><a class="dropdown-item" href="javascript:void(0);"><button class="dropdown-item btn btn-danger " type="submit">logout</button></a></li>
+              </ul>
+            </div>
+
+            
+              
             </form>
             {% else %}
             <a href="/login" class="btn btn-primary"><span class="d-none d-md-block">Login</span></a>
