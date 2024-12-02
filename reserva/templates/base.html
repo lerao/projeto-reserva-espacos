@@ -101,13 +101,13 @@
           </button>
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
-              <a class="nav-link fw-medium" aria-current="page" href="{% url 'index' %}">Home</a>
+              <a class="nav-link fw-medium {% if request.resolver_match.url_name == 'index' %}active{% endif %}" aria-current="page" href="{% url 'index' %}">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link fw-medium" href="{% url 'minhas_reservas' %}">Minhas Reservas</a>
+              <a class="nav-link fw-medium {% if request.resolver_match.url_name == 'minhas_reservas' %}active{% endif %}" href="{% url 'minhas_reservas' %}">Minhas Reservas</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link fw-medium" href="{% url 'criar_reserva' %}">Reservar</a>
+              <a class="nav-link fw-medium {% if request.resolver_match.url_name == 'criar_reserva' %}active{% endif %}" href="{% url 'criar_reserva' %}">Reservar</a>
             </li>
             <li class="nav-item">
 
@@ -127,7 +127,7 @@
             <div class="btn-group">
               <button type="button" class="btn btn-info dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">{{ user.nome }}<span style="font-size: 0.7rem; margin-left: 9px;">▼</span></button>
               <ul class="dropdown-menu" >
-                <li><a class="dropdown-item" href="{% url 'admin:password_change' %}">Editar Perfil</a></li>
+                <li><a class="dropdown-item" href="{% url 'admin:password_change' %}">Alterar senha</a></li>
                 
                 <li>
                   <hr class="dropdown-divider">

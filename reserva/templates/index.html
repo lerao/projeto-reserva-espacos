@@ -4,47 +4,47 @@
 {% block content %}
 
 <div data-bs-spy="scroll" class="scrollspy-example">
-  <section id="landingFunFacts" class="section-py landing-fun-facts">
-    <div class="container">
-      <div class="row gy-6" style="margin-top: 60px;">
-          <h4 class="text-center mb-1">
-              <span class="position-relative fw-extrabold z-1">&lt;</span>
-              <span class="position-relative fw-extrabold z-1" style="width: 50%;"> Reservas Atuais </span>
-              <span class="position-relative fw-extrabold z-1">&gt;</span>
-          </h4>
-  
-          {% for espaco, reservas_detalhadas in reservas_por_espaco.items %}
-          <div class="col-sm-6 col-lg-3">
-              <div class="card border border-primary shadow-none">
-                  <div class="card-body text-center">
-                      <h3 class="mb-0">{{ espaco.nome }}</h3>
-                      {% if reservas_detalhadas %}
-                          {% for detalhe in reservas_detalhadas %}
-                          <p class="fw-medium mb-0">
-                              <span class="badge" style="background: #80808a;">
-                                  {{ detalhe.reserva.data }} - {{ detalhe.reserva.turma }}
-                              </span>
-                              <br>
-                              Horários:
-                              {% for horario in detalhe.horarios %}
-                                  <span class="badge" style="background: #e0e0e0;">
-                                      {{ horario.numero_aula.horario }}
-                                  </span>
-                              {% endfor %}
-                          </p>
-                          {% endfor %}
-                      {% else %}
-                      <p class="fw-medium mb-0">Sem reservas</p>
-                      {% endif %}
-                  </div>
-              </div>
-          </div>
-          {% endfor %}
-      </div>
-  </div>
-  
-  
-  </section>
+    <section id="landingFunFacts" class="section-py landing-fun-facts">
+        <div class="container">
+            <div class="row gy-6 d-flex justify-content-center" style="margin-top: 60px;">
+                <h4 class="text-center mb-1">
+                    <span class="position-relative fw-extrabold z-1">&lt;</span>
+                    <span class="position-relative fw-extrabold z-1" style="width: 50%;"> Reservas Atuais </span>
+                    <span class="position-relative fw-extrabold z-1">&gt;</span>
+                </h4>
+
+                {% for espaco, reservas_detalhadas in reservas_por_espaco.items %}
+                <div class="col-sm-6 col-lg-3 ">
+                    <div class="card border border-primary shadow-none">
+                        <div class="card-body text-center">
+                            <h3 class="mb-0">{{ espaco.nome }}</h3>
+                            {% if reservas_detalhadas %}
+                            {% for detalhe in reservas_detalhadas %}
+                            <p class="fw-medium mb-0">
+                                <span class="badge" style="background: #80808a;">
+                                    {{ detalhe.reserva.data }} - {{ detalhe.reserva.turma }}
+                                </span>
+                                <br>
+                                Horários:
+                                {% for horario in detalhe.horarios %}
+                                <span class="badge" style="background: #e0e0e0;">
+                                    {{ horario.numero_aula.horario }}
+                                </span>
+                                {% endfor %}
+                            </p>
+                            {% endfor %}
+                            {% else %}
+                            <p class="fw-medium mb-0">Sem reservas</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+
+    </section>
 </div>
 
 {% endblock %}
