@@ -7,9 +7,25 @@
     <section id="landingFunFacts" class="section-py landing-fun-facts">
         <div class="container">
             <div class="row gy-6 d-flex justify-content-center" style="margin-top: 60px;">
+                <div class="col-12 text-center mb-4">
+                    <form method="get" id="filter-form">
+                        <div class="row align-items-center justify-content-center">
+                            <div class="col-md-4">
+                                <label for="filter-date" class="form-label">Filtrar por Data</label>
+                                <input type="date" id="filter-date" name="data" class="form-control" value="{{ data_filtro }}">
+                            </div>
+                            <div class="col-md-2 mt-3 mt-md-0">
+                                <button type="submit" class="btn btn-primary">Aplicar Filtro</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
                 <h4 class="text-center mb-1">
                     <span class="position-relative fw-extrabold z-1">&lt;</span>
-                    <span class="position-relative fw-extrabold z-1" style="width: 50%;"> Reservas Atuais </span>
+                    <span class="position-relative fw-extrabold z-1" style="width: 50%;"> 
+                        Reservas do Dia {{ data_filtro|date:"d/m/Y" }}
+                    </span>
                     <span class="position-relative fw-extrabold z-1">&gt;</span>
                 </h4>
 
@@ -42,8 +58,6 @@
                 {% endfor %}
             </div>
         </div>
-
-
     </section>
 </div>
 

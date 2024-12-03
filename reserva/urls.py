@@ -3,6 +3,7 @@ from django.urls import path, include, reverse_lazy
 from rest_framework.routers import DefaultRouter
 from . import views
 from django.contrib.auth.views import LogoutView
+from .views import eventos_agenda_semanal, agenda_semanal_view
 
 
 router = DefaultRouter()
@@ -19,4 +20,6 @@ urlpatterns = [
     path('horarios-disponiveis/', views.horarios_disponiveis, name='horarios_disponiveis'),
     path('minhas-reservas/', views.minhas_reservas_view, name= 'minhas_reservas'),
     path('cancelar-reserva/<int:reserva_id>/', views.cancelar_reserva, name='cancelar_reserva'),
+    path('agenda-semanal/', views.agenda_semanal_view, name='agenda_semanal'),
+    path('eventos/', views.eventos_agenda_semanal, name='eventos'),
 ]

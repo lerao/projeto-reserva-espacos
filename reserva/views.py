@@ -10,7 +10,9 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from .forms import ReservaForm
 from django.http import JsonResponse, HttpResponseRedirect
-
+from django.utils.timezone import now
+from django.http import JsonResponse
+from datetime import date, timedelta
 
 # Create your views here.
 
@@ -54,15 +56,22 @@ def login_view(request):
     return render(request, 'login.html')
 
 
-from django.shortcuts import render
-from .models import Espaco, Reserva, ReservarHorario
+from datetime import date
 
 def index_view(request):
     espacos = Espaco.objects.all()
     reservas_por_espaco = {}
+    
+    # Obter a data do filtro ou usar a data de hoje
+    data_filtro = request.GET.get('data', date.today())
+    if isinstance(data_filtro, str):
+        try:
+            data_filtro = date.fromisoformat(data_filtro)
+        except ValueError:
+            data_filtro = date.today()  # Voltar para a data atual se houver erro
 
     for espaco in espacos:
-        reservas = Reserva.objects.filter(espaco=espaco).order_by('data')
+        reservas = Reserva.objects.filter(espaco=espaco, data=data_filtro).order_by('data')
         reservas_detalhadas = []
         for reserva in reservas:
             horarios = ReservarHorario.objects.filter(reserva=reserva).select_related('numero_aula')
@@ -75,11 +84,9 @@ def index_view(request):
     context = {
         'espacos': espacos,
         'reservas_por_espaco': reservas_por_espaco,
+        'data_filtro': data_filtro,
     }
     return render(request, 'index.html', context)
-
-
-
 
 
 @login_required
@@ -150,11 +157,6 @@ def horarios_disponiveis(request):
         print(f"Erro ao processar: {str(e)}")
         return JsonResponse({'error': 'Erro ao processar a solicitação.'}, status=500)
 
-
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .models import Espaco, Horario, Reserva, ReservarHorario
-
 def criar_reserva(request):
     if request.method == 'POST':
         espaco_id = request.POST.get('espaco')
@@ -215,5 +217,24 @@ def criar_reserva(request):
     espacos = Espaco.objects.filter(ativo=True)
     return render(request, 'reserva_form.html', {'horarios': horarios, 'espacos': espacos})
 
+def agenda_semanal_view(request):
+    return render(request, 'agenda_semanal.html')
 
+
+def eventos_agenda_semanal(request):
+    eventos = []
+
+    # Buscar reservas e horários
+    reservas = Reserva.objects.all()
+    for reserva in reservas:
+        horarios = reserva.horarios.all()
+        for horario in horarios:
+            eventos.append({
+                'title': f"{reserva.turma} - Aula {horario.numero_aula.numero_aula}",
+                'start': f"{reserva.data}T{horario.numero_aula.horario}",
+                'end': f"{reserva.data}T{horario.numero_aula.horario}",
+                'description': reserva.motivo,
+            })
+
+    return JsonResponse(eventos, safe=False)
 
