@@ -115,7 +115,7 @@
 
             </li>
             <li class="nav-item">
-              <a class="nav-link fw-medium" href="calendario-semanal">Calendário Semanal</a>
+              <a class="nav-link fw-medium {% if request.resolver_match.url_name == 'agenda_semanal' %} active {% endif %}" href="{% url 'agenda_semanal' %}">Calendário Semanal</a>
             </li>
 
 
