@@ -13,7 +13,8 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.utils.timezone import now
 from django.http import JsonResponse
 from datetime import date, timedelta
-
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.hashers import check_password
 # Create your views here.
 
 class ServidorViewSet(viewsets.ModelViewSet):
@@ -95,6 +96,9 @@ def logado_view(request):
 
 
 
+
+
+
 @login_required
 def minhas_reservas_view(request):
     reservas = Reserva.objects.filter(matricula=request.user)
@@ -130,6 +134,43 @@ def cancelar_reserva(request, reserva_id):
 
 
 
+@login_required
+def alterar_senha(request):
+    info_user = request.user
+    erro = None
+    sucesso = False
+
+    if request.method == 'POST':
+        senha_atual = request.POST.get('senha_atual')
+        nova_senha = request.POST.get('nova_senha')
+        confirmar_senha = request.POST.get('confirmar_senha')
+        
+        if not check_password(senha_atual, info_user.password):
+            erro = 'A senha atual está incorreta.'
+
+        elif nova_senha != confirmar_senha:
+            erro = 'As senhas não coincidem.'
+
+        elif len(nova_senha) < 8:
+            erro = 'A nova senha deve ter pelo menos 8 caracteres.'
+        
+        else:
+            info_user.set_password(nova_senha)
+            info_user.save()
+            sucesso = True
+
+    return render(request, 'alterar_senha.html', {'info_user':info_user, 'erro':erro, 'sucesso': sucesso})
+
+
+@login_required
+def validar_senha_atual(request):
+    if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        senha_atual = request.POST.get('senha_atual')
+        user = request.user
+        if check_password(senha_atual, user.password):
+            return JsonResponse({'valida': True}, status=200)
+        else:
+            return JsonResponse({'valida': False}, status=400)
 
 @login_required
 def espaco_view(request):
@@ -157,6 +198,7 @@ def horarios_disponiveis(request):
         print(f"Erro ao processar: {str(e)}")
         return JsonResponse({'error': 'Erro ao processar a solicitação.'}, status=500)
 
+@login_required
 def criar_reserva(request):
     if request.method == 'POST':
         espaco_id = request.POST.get('espaco')
