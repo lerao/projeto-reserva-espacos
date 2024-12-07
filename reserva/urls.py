@@ -3,6 +3,7 @@ from django.urls import path, include, reverse_lazy
 from rest_framework.routers import DefaultRouter
 from . import views
 from django.contrib.auth.views import LogoutView
+from django.contrib.auth import views as auth_views
 from .views import *
 
 
@@ -24,4 +25,9 @@ urlpatterns = [
     path('cancelar-reserva/<int:reserva_id>/', views.cancelar_reserva, name='cancelar_reserva'),
     path('agenda-semanal/', views.agenda_semanal_view, name='agenda_semanal'),
     path('eventos/', views.eventos_agenda_semanal, name='eventos'),
+    
+    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 ]
