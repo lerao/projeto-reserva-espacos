@@ -103,19 +103,23 @@
           </button>
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
-              <a class="nav-link fw-medium {% if request.resolver_match.url_name == 'index' %}active{% endif %}" aria-current="page" href="{% url 'index' %}">Home</a>
+              <a class="nav-link fw-medium {% if request.resolver_match.url_name == 'index' %}active{% endif %}"
+                aria-current="page" href="{% url 'index' %}">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link fw-medium {% if request.resolver_match.url_name == 'minhas_reservas' %}active{% endif %}" href="{% url 'minhas_reservas' %}">Minhas Reservas</a>
+              <a class="nav-link fw-medium {% if request.resolver_match.url_name == 'minhas_reservas' %}active{% endif %}"
+                href="{% url 'minhas_reservas' %}">Minhas Reservas</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link fw-medium {% if request.resolver_match.url_name == 'criar_reserva' %}active{% endif %}" href="{% url 'criar_reserva' %}">Reservar</a>
+              <a class="nav-link fw-medium {% if request.resolver_match.url_name == 'criar_reserva' %}active{% endif %}"
+                href="{% url 'criar_reserva' %}">Reservar</a>
             </li>
             <li class="nav-item">
 
             </li>
             <li class="nav-item">
-              <a class="nav-link fw-medium {% if request.resolver_match.url_name == 'agenda_semanal' %} active {% endif %}" href="{% url 'agenda_semanal' %}">Calendário Semanal</a>
+              <a class="nav-link fw-medium {% if request.resolver_match.url_name == 'agenda_semanal' %} active {% endif %}"
+                href="{% url 'agenda_semanal' %}">Calendário Semanal</a>
             </li>
 
 
@@ -126,21 +130,39 @@
           <li>
             {% if user.is_authenticated %}
             <form method="post" action="{% url 'logout' %}" style="gap: 15px; display: flex;">
-            <div class="btn-group">
-              <button type="button" class="btn btn-info dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">{{ user.nome }}<span style="font-size: 0.7rem; margin-left: 9px;">▼</span></button>
-              <ul class="dropdown-menu" >
-                <li><a class="dropdown-item" href="{% url 'alterar_senha' %}">Alterar senha</a></li>
-                
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                {% csrf_token %}
-                <li><a class="dropdown-item" href="javascript:void(0);"><button class="dropdown-item btn btn-danger " type="submit">logout</button></a></li>
-              </ul>
-            </div>
+              <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle hide-arrow" data-bs-toggle="dropdown"
+                  aria-expanded="false">{{ user.nome }}<span
+                    style="font-size: 0.7rem; margin-left: 9px;">▼</span></button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      <div class="d-flex">
+                        <div class="flex-shrink-0 me-3">
+                        </div>
+                        <div class="flex-grow-1">
+                          <small class="text-muted">{{ user.matricula }}</small>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li><a class="dropdown-item" href="{% url 'alterar_senha' %}">Alterar senha</a></li>
 
-            
-              
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  {% csrf_token %}
+                  <li>
+                    
+                    <a class="dropdown-item" href="javascript:void(0);">
+                     <button type="submit" style="all: unset;">logout</button>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+
+
             </form>
             {% else %}
             <a href="/login" class="btn btn-primary"><span class="d-none d-md-block">Login</span></a>

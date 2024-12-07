@@ -20,78 +20,48 @@
 
         {% for espaco, reservas_espaco in espacos_reservas.items %}
         <div class="col-sm-6 col-lg-3">
-          <div class="card border border-primary shadow-none">
+          <div class="card border border-primary shadow-none" >
             <div class="card-body text-center" style="gap: 10px; display: flex; flex-direction: column;">
               <h3 class="mb-0">{{ espaco.nome }}</h3>
-
+      
               {% if reservas_espaco %}
               {% for agend in reservas_espaco %}
-              <span class="badge reserva-{{ agend.id }}" style="background: #80808a; display: flex; flex-direction: column; text-align: center;">
+              <span class="d-flex badge reserva-{{ agend.id }}" style="background: #80808a; display: flex; flex-direction: column; text-align: center; position: relative;">
+                
                 <div style="text-align: center;">
                   {{ agend.reserva.turma }} | {{ agend.reserva.data|date:"d/M" }}
                 </div>
                 <div style="text-align: center; display: flex; flex-direction: column;">
-                  
+      
                   {% for horario in agend.horarios %}
                   <div style="margin-top: 3px;">
-                    
                     {{horario.numero_aula}}
-
                   </div>
-                  
                   {% endfor %}
                   
-                  {% if agend.is_future %}
-                  <button type="button" class="btn btn-sm btn-danger cancelar-reserva" data-id="{{ agend.reserva.id }}"  style="margin-left: 10px; border-radius: 50px; height: 10px; margin-top: 7px;"
-                  >
-                  X
-                </button>
-                
-                {% else %}
-                <img src="../static/img/Icon-confirmation.svg" alt=""
-                style="width: 20px; height: 20px; opacity: 0.3;">
-                {% endif %}
-                  
-              </div>
-
+                  <div class="d-flex justify-content-end">
+                    {% if agend.is_future %}
+                    <button type="button" class="btn-danger cancelar-reserva"
+                      data-id="{{ agend.reserva.id }}" style="border-radius: 20px; padding: auto 2px; position: absolute; top: 10px; right: 10px;">
+                      X
+                    </button>
+                    {% else %}
+                    <img src="../static/img/Icon-confirmation.svg" alt="" style="width: 20px; height: 20px; opacity: 0.5; position: absolute; top: 10px; right: 10px;">
+                    {% endif %}
+                  </div>
+      
+                </div>
+      
               </span>
               {% endfor %}
-
               {% endif %}
-
+      
             </div>
           </div>
         </div>
-        {% endfor %}
-        <!-- <div class="col-sm-6 col-lg-3">
-            <div class="card border border-success shadow-none">
-              <div class="card-body text-center">
+      {% endfor %}
+      
 
-                <h3 class="mb-0">Lab. Especial</h3>
-
-                <p class="fw-medium mb-0">Sem reservas<br>
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-lg-3">
-            <div class="card border border-info shadow-none">
-              <div class="card-body text-center">
-
-                <h3 class="mb-0">Lab. Fisica</h3>
-                <p class="fw-medium mb-0">Sem reservas<br></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 col-lg-3">
-            <div class="card border border-warning shadow-none">
-              <div class="card-body text-center">
-
-                <h3 class="mb-0">Lab. Linguas</h3>
-                <p class="fw-medium mb-0">Sem reservas<br></p>
-              </div>
-            </div>
-          </div> -->
       </div>
     </div>
   </section>
