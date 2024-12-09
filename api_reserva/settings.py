@@ -56,10 +56,17 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'api_reserva.urls'
 
+
+WSGI_APPLICATION = 'api_reserva.wsgi.application'
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'templates',
+            BASE_DIR / 'reserva' / 'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -72,12 +79,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'api_reserva.wsgi.application'
-
-# Backend para envio de e-mails
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # Configuração do servidor SMTP (exemplo: Gmail)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Servidor do Gmail
 EMAIL_PORT = 587               # Porta para envio com TLS
 EMAIL_USE_TLS = True           # Ativar o protocolo TLS para segurança
@@ -128,7 +132,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'pt-br'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Recife'
 
 USE_I18N = True
 
