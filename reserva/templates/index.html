@@ -32,22 +32,27 @@
                 {% for espaco, reservas_detalhadas in reservas_por_espaco.items %}
                 <div class="col-sm-6 col-lg-3 ">
                     <div class="card border border-primary shadow-none">
-                        <div class="card-body text-center">
+                        <div class="card-body text-center" style="gap: 10px; display: flex; flex-direction: column;">
                             <h3 class="mb-0">{{ espaco.nome }}</h3>
                             {% if reservas_detalhadas %}
                             {% for detalhe in reservas_detalhadas %}
-                            <p class="fw-medium mb-0">
-                                <span class="badge" style="background: #80808a;">
+                            <span class="d-flex badge" style="background: #80808a; display: flex; flex-direction: column; text-align: center;">
+                                <div style="text-align: center;">
                                     {{ detalhe.reserva.data }} - {{ detalhe.reserva.turma }}
-                                </span>
+                                </div>
                                 <br>
-                                Horários:
+                            </span>
+                            <spa style="display: flex; gap: 5px;">
+                                <span style="margin-right: 5px;">Horários:</span>
+
                                 {% for horario in detalhe.horarios %}
-                                <span class="badge" style="background: #e0e0e0;">
+                                
+                                <span class="d-flex badge w-25 btn-primary" style=" display: flex; flex-direction: column; text-align: center;">
                                     {{ horario.numero_aula.horario }}
                                 </span>
+                                
                                 {% endfor %}
-                            </p>
+                            </span>
                             {% endfor %}
                             {% else %}
                             <p class="fw-medium mb-0">Sem reservas</p>
