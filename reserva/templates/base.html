@@ -136,15 +136,15 @@
                     style="font-size: 0.7rem; margin-left: 9px;">▼</span></button>
                 <ul class="dropdown-menu">
                   <li>
-                    <a class="dropdown-item" href="#">
+                    <div class="dropdown-item" href="#" style="cursor: default;">
                       <div class="d-flex">
                         <div class="flex-shrink-0 me-3">
                         </div>
-                        <div class="flex-grow-1">
-                          <small class="text-muted">{{ user.matricula }}</small>
+                        <div class="flex-grow-1" >
+                          <small class="text-muted" >{{ user.matricula }}</small>
                         </div>
                       </div>
-                    </a>
+                    </div>
                   </li>
                   <li><a class="dropdown-item" href="{% url 'alterar_senha' %}">Alterar senha</a></li>
 
@@ -156,7 +156,7 @@
 
                     <a class="dropdown-item" href="javascript:void(0);">
                       <button type="submit" style="all: unset;">Logout</button>
-                      <img src="../static/img/log-out-outline.svg" alt="" style="width: 10%;">
+                      <img src="../static/img/log-out-outline.svg" alt="" style="width: 20%;">
                     </a>
                   </li>
                 </ul>
