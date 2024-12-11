@@ -101,11 +101,9 @@ def logado_view(request):
 
 @login_required
 def minhas_reservas_view(request):
-    reservas = Reserva.objects.filter(matricula=request.user)
     data_hoje = date.today()
-    espacos_reservas = {}
 
-    data_filtro = request.GET.get('data', data_hoje)
+    data_filtro = request.GET.get('data', date.today())
     if isinstance(data_filtro, str):
         try:
             data_filtro = date.fromisoformat(data_filtro)
@@ -113,6 +111,8 @@ def minhas_reservas_view(request):
             data_filtro = data_hoje
 
     
+    reservas = Reserva.objects.filter(matricula=request.user, data = data_filtro)
+    espacos_reservas = {}
     for espaco in Espaco.objects.all():
         # Verifica se há reservas para esse espaço do usuário logado
         reservas_do_espaco = reservas.filter(espaco=espaco)
@@ -126,6 +126,7 @@ def minhas_reservas_view(request):
                     'reserva': reserva,
                     'horarios': horarios,
                     'is_future': is_future,
+                    
                 })
 
     context = {

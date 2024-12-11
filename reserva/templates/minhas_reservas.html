@@ -10,13 +10,24 @@
     margin-top: 60px; justify-content: center;
 ">
         <h1 class="text-center mb-1">Minhas Reservas</h1>
-        <h4 class="text-center mb-1">
+        <h5 class="text-center mb-1">{{ data_filtro|date:"d/M/Y" }}</h5>
+        <div class="text-center mb-1">
           <span class="position-relative fw-extrabold z-1" style="width: 50%;">
 
-            <input type="date" id="filtro-data" value="{{ data_hoje }}" style="border-radius: 5px; text-align: center;">
+            <form method="get" id="filter-form">
+              <div class="row align-items-center justify-content-center">
+                  <div class="col-md-2">
+                      <label for="filter-date" class="form-label">Filtrar por Data</label>
+                      <input type="date" id="filter-date" name="data" class="form-control w-100" value="{{ data_filtro }}">
+                  </div>
+                  <div class="col-md-2 mt-5 ">
+                      <button type="submit" class="btn btn-primary">Aplicar Filtro</button>
+                  </div>
+              </div>
+          </form>
 
           </span>
-        </h4>
+        </div>
 
         {% for espaco, reservas_espaco in espacos_reservas.items %}
         <div class="col-sm-6 col-lg-3">
