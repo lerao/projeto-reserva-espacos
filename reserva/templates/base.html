@@ -23,6 +23,9 @@
   <link rel="stylesheet" href="{% static 'assets/vendor/libs/swiper/swiper.css' %}" />
 
   <link rel="stylesheet" href="{% static 'assets/vendor/css/pages/front-page-landing.css' %}" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+
+
 
   <script src="{% static 'assets/vendor/js/helpers.js' %}"></script>
   <script src="{% static 'assets/js/front-config.js' %}"></script>
@@ -50,7 +53,7 @@
             <i class="fa fa-bars fa-2x"></i>
           </button>
           <!-- Mobile menu toggle: End-->
-          <a href="" class="app-brand-link">
+          <a href="{% url 'index'%}" class="app-brand-link">
             <span class="app-brand-logo demo">
 
               <svg width="25" viewBox="0 0 25 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -101,7 +104,10 @@
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <i class="tf-icons bx bx-x bx-lg"></i>
           </button>
+          <!-- Remove ou substitua itens de navegação específicos aqui -->
+
           <ul class="navbar-nav me-auto">
+            {% block nav_custom %}
             <li class="nav-item">
               <a class="nav-link fw-medium {% if request.resolver_match.url_name == 'index' %}active{% endif %}"
                 aria-current="page" href="{% url 'index' %}">Home</a>
@@ -115,14 +121,18 @@
                 href="{% url 'criar_reserva' %}">Reservar</a>
             </li>
             <li class="nav-item">
-
-            </li>
-            <li class="nav-item">
               <a class="nav-link fw-medium {% if request.resolver_match.url_name == 'agenda_semanal' %} active {% endif %}"
                 href="{% url 'agenda_semanal' %}">Calendário Semanal</a>
             </li>
+            {% if user.is_staff %}
+            <li class="nav-item">
+              <a class="nav-link fw-medium {% if request.resolver_match.url_name == 'dashboard' %} active {% endif %}"
+                href="{% url 'dashboard' %}">Dashboard</a>
+            </li>
+            {% endif %}
 
 
+            {% endblock %}
           </ul>
         </div>
         <div class="landing-menu-overlay d-lg-none"></div>
@@ -140,8 +150,8 @@
                       <div class="d-flex">
                         <div class="flex-shrink-0 me-3">
                         </div>
-                        <div class="flex-grow-1" >
-                          <small class="text-muted" >{{ user.matricula }}</small>
+                        <div class="flex-grow-1">
+                          <small class="text-muted">{{ user.matricula }}</small>
                         </div>
                       </div>
                     </div>
@@ -153,10 +163,11 @@
                   </li>
                   {% csrf_token %}
                   <li>
-
                     <a class="dropdown-item" href="javascript:void(0);">
-                      <button type="submit" style="all: unset;">Logout</button>
-                      <img src="../static/img/log-out-outline.svg" alt="" style="width: 20%;">
+                      <button type="submit" style="all: unset;">Logout
+                        <img src="../static/img/log-out-outline.svg" alt="" style="width: 20%;">
+
+                      </button>
                     </a>
                   </li>
                 </ul>
@@ -230,7 +241,7 @@
     </div>
   </footer>
 
-
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <script src="{% static 'assets/vendor/libs/popper/popper.js' %}"></script>
   <script src="{% static 'assets/vendor/js/bootstrap.js' %}"></script>
@@ -239,6 +250,10 @@
   <script src="{% static 'assets/vendor/libs/nouislider/nouislider.js' %}"></script>
   <script src="{% static 'assets/vendor/libs/swiper/swiper.js' %}"></script>
   <script src="{% static 'assets/js/front-main.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
 
 </body>

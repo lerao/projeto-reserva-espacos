@@ -15,6 +15,10 @@ from django.http import JsonResponse
 from datetime import date, timedelta
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.contrib.auth.hashers import check_password
+from django.db import models
+from django.db.models import Count
+from django.contrib.auth.decorators import login_required, user_passes_test
+
 # Create your views here.
 
 class ServidorViewSet(viewsets.ModelViewSet):
@@ -293,3 +297,46 @@ def eventos_agenda_semanal(request):
 
     return JsonResponse(eventos, safe=False)
 
+
+
+# Decorador para garantir que apenas administradores acessem
+@login_required(login_url='/login/')  # Página de login personalizada
+@user_passes_test(lambda u: u.is_staff, login_url='index')
+def grafico_reservas(request):
+    users = Servidor.objects.aggregate(Count('id'))
+    reservas = Reserva.objects.all()
+    servidores_reservas = Servidor.objects.annotate(num_reservas=Count('reserva')).order_by('-num_reservas')
+
+    
+
+    reservas_ativas = []
+    reservas_inativas = []
+    for reserva in reservas:
+        if reserva.data >= date.today():
+            reservas_ativas.append(reserva)
+        else:
+            reservas_inativas.append(reserva)
+
+    data_hoje = date.today()
+    data = Reserva.objects.values('espaco__nome').annotate(num_reservas=Count('id')).order_by('espaco__nome')
+
+    # Prepara os dados para o template
+    data_zip = [(entry['espaco__nome'], entry['num_reservas']) for entry in data]
+
+    total_reservas = Reserva.objects.count()
+
+    for servidor in servidores_reservas:
+        if total_reservas > 0:
+            servidor.percentual_reservas = (servidor.num_reservas / total_reservas) * 100
+        else:
+            servidor.percentual_reservas = 0
+
+    context={
+        'data_zip': data_zip,
+        'users': users,
+        'reservas_ativas': reservas_ativas,
+        'reservas_inativas': reservas_inativas,
+        'servidores_reservas': servidores_reservas,
+    }
+
+    return render(request, 'dashboard.html', context)

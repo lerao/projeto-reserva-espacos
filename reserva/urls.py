@@ -5,12 +5,14 @@ from . import views
 from django.contrib.auth.views import LogoutView
 from django.contrib.auth import views as auth_views
 from .views import *
-
+from django.contrib import admin
 
 router = DefaultRouter()
 
 
 urlpatterns = [
+    
+
     path('api/', include(router.urls)),
     path('logout/',LogoutView.as_view(next_page=reverse_lazy('login')),name='logout'),
     path('login/', views.login_view, name='login'),
@@ -25,6 +27,7 @@ urlpatterns = [
     path('cancelar-reserva/<int:reserva_id>/', views.cancelar_reserva, name='cancelar_reserva'),
     path('agenda-semanal/', views.agenda_semanal_view, name='agenda_semanal'),
     path('eventos/', views.eventos_agenda_semanal, name='eventos'),
+    path('dashboard/', views.grafico_reservas, name='dashboard'),
     
 
     
